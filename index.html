@@ -3,244 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SXJNB666 - 软件下载站</title>
+    <title>SXJNB666</title>
     <style>
+        /* ==========================================
+           基础变量与全局设定 (现代低饱和高级数码风)
+        ========================================== */
+        :root {
+            --bg-base: #121214;          /* 极简深色背景 */
+            --bg-surface: #1a1a1d;       /* 卡片/表面背景 */
+            --text-primary: #e6e6e6;     /* 主文本高亮 */
+            --text-secondary: #8a8a93;   /* 副文本低饱和 */
+            --border-color: #2c2c30;     /* 边框分割线 */
+            --btn-bg: #2b2b2f;           /* 按钮背景 */
+            --btn-hover: #3a3a40;        /* 按钮悬浮 */
+            --radius-md: 12px;           /* 圆角标准 */
+            --radius-sm: 8px;
+            --transition-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-            min-height: 100vh;
-            color: #e0e0e0;
+            font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        .header {
-            text-align: center;
-            padding: 60px 20px 40px;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, #e94560, #ff6b6b, #feca57);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
-
-        .header p {
-            color: #a0a0a0;
-            font-size: 1.1rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px 60px;
-        }
-
-        .software-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .software-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .software-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(233, 69, 96, 0.5);
-            box-shadow: 0 10px 40px rgba(233, 69, 96, 0.2);
-        }
-
-        .software-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #e94560, #0f3460);
-            border-radius: 15px;
+        /* ==========================================
+           顶部导航栏
+        ========================================== */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 6%;
+            background: rgba(18, 18, 20, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1000;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-            margin-bottom: 20px;
         }
 
-        .software-name {
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        /* ==========================================
+           首页横幅视觉区 (Hero Section)
+        ========================================== */
+        .hero {
+            height: 55vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            max-width: 600px;
+        }
+
+        /* ==========================================
+           软件下载分区 (卡片网格布局)
+        ========================================== */
+        .downloads-section {
+            padding: 60px 6% 100px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        /* 软件卡片样式与悬浮动画 */
+        .card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition-smooth);
+            will-change: transform, box-shadow;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            border-color: #3e3e44;
+        }
+
+        .card h2 {
             font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 8px;
-            color: #fff;
+            margin-bottom: 16px;
         }
 
-        .software-version {
-            display: inline-block;
-            background: rgba(233, 69, 96, 0.2);
-            color: #e94560;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-bottom: 15px;
-        }
-
-        .software-desc {
-            color: #b0b0b0;
-            line-height: 1.6;
-            margin-bottom: 20px;
+        .card p {
+            color: var(--text-secondary);
             font-size: 0.95rem;
+            flex-grow: 1;
+            margin-bottom: 32px;
         }
 
-        .software-meta {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .meta-tag {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #888;
-            font-size: 0.85rem;
-        }
-
-        .meta-tag svg {
-            width: 16px;
-            height: 16px;
-        }
-
+        /* 按钮交互与点击反馈 */
         .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #e94560, #c73e54);
-            color: white;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            background-color: var(--btn-bg);
+            color: var(--text-primary);
             text-decoration: none;
-            padding: 12px 28px;
-            border-radius: 10px;
+            padding: 14px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
+            transition: var(--transition-smooth);
+            border: 1px solid transparent;
         }
 
         .download-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4);
+            background-color: var(--btn-hover);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
-        .download-btn svg {
-            width: 18px;
-            height: 18px;
+        .download-btn:active {
+            transform: scale(0.97);
         }
 
-        .footer {
+        /* ==========================================
+           页脚板块
+        ========================================== */
+        footer {
+            padding: 40px 6%;
             text-align: center;
-            padding: 40px 20px;
-            color: #666;
-            font-size: 0.9rem;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
         }
 
+        /* ==========================================
+           轻量化滚动渐显动画 (Reveal Animation)
+        ========================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 页面初次载入渐变 */
+        .fade-in-load {
+            animation: fadeIn 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ==========================================
+           响应式适配 (Mobile & Tablet)
+        ========================================== */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
+            .card {
+                padding: 30px 24px;
             }
-            .software-grid {
-                grid-template-columns: 1fr;
+            .downloads-section {
+                padding: 40px 6% 80px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
+
+    <nav>
+        <a href="#" class="logo fade-in-load">SXJNB666</a>
+    </nav>
+
+    <header class="hero fade-in-load" style="animation-delay: 0.1s;">
         <h1>SXJNB666</h1>
-        <p>精选软件下载站</p>
-    </div>
+        <p>探索纯粹的数字体验</p>
+    </header>
 
-    <div class="container">
-        <div class="software-grid">
-            <!-- 软件1: APO -->
-            <div class="software-card">
-                <div class="software-icon">A</div>
-                <div class="software-name">APO</div>
-                <span class="software-version">最新版</span>
-                <p class="software-desc">
-                    音频效果处理工具，支持系统级音频均衡器和音效增强，可自定义各种音频参数。
-                </p>
-                <div class="software-meta">
-                    <span class="meta-tag">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        Windows
-                    </span>
-                </div>
-                <a href="#" class="download-btn" onclick="alert('请替换为真实下载链接'); return false;">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    立即下载
-                </a>
+    <section class="downloads-section">
+        <div class="card-grid">
+            
+            <div class="card reveal">
+                <h2>equalizerAPO</h2>
+                <p>此处为 equalizerAPO 软件简介占位文本。可根据需要替换为详细的软件功能描述或配置要求说明。</p>
+                <a href="#" class="download-btn">立即下载</a>
             </div>
 
-            <!-- 软件2: FXSOUND -->
-            <div class="software-card">
-                <div class="software-icon">F</div>
-                <div class="software-name">FXSOUND</div>
-                <span class="software-version">最新版</span>
-                <p class="software-desc">
-                    专业音效增强软件，提升音质、增强低音、优化音频输出效果，让声音更震撼。
-                </p>
-                <div class="software-meta">
-                    <span class="meta-tag">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        Windows
-                    </span>
-                </div>
-                <a href="#" class="download-btn" onclick="alert('请替换为真实下载链接'); return false;">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    立即下载
-                </a>
+            <div class="card reveal">
+                <h2>FXSOUND</h2>
+                <p>此处为 FXSOUND 软件简介占位文本。可根据需要替换为详细的软件功能描述或配置要求说明。</p>
+                <a href="#" class="download-btn">立即下载</a>
             </div>
 
-            <!-- 软件3: GG -->
-            <div class="software-card">
-                <div class="software-icon">G</div>
-                <div class="software-name">GG</div>
-                <span class="software-version">最新版</span>
-                <p class="software-desc">
-                    游戏辅助工具，提供游戏优化、性能监控和实用功能，提升游戏体验。
-                </p>
-                <div class="software-meta">
-                    <span class="meta-tag">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        Windows
-                    </span>
-                </div>
-                <a href="#" class="download-btn" onclick="alert('请替换为真实下载链接'); return false;">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    立即下载
-                </a>
+            <div class="card reveal">
+                <h2>赛睿 GG</h2>
+                <p>此处为 赛睿 GG 软件简介占位文本。可根据需要替换为详细的软件功能描述或配置要求说明。</p>
+                <a href="#" class="download-btn">立即下载</a>
             </div>
+
         </div>
-    </div>
+    </section>
 
-    <div class="footer">
-        <p>SXJNB666 © 2025 | 软件仅供学习交流使用</p>
-    </div>
+    <footer>
+        <p>&copy; 2026 SXJNB666. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 滚动渐显动画逻辑 (Intersection Observer API)
+            const revealElements = document.querySelectorAll('.reveal');
+
+            // 配置观察器
+            const observerOptions = {
+                root: null,        // 使用视口作为根
+                rootMargin: '0px',
+                threshold: 0.15    // 元素露出 15% 时触发
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // 添加 active 类以触发 CSS 动画
+                        entry.target.classList.add('active');
+                        // 动画触发后取消观察，提升页面性能
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // 将所有带有 .reveal 类的元素加入观察列表
+            revealElements.forEach(element => {
+                revealObserver.observe(element);
+            });
+        });
+    </script>
+
 </body>
 </html>
